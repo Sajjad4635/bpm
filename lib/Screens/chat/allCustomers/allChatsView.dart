@@ -119,6 +119,7 @@ class _AllCustomersState extends State<AllCustomers> {
                       itemBuilder: (context, index) {
                         return InkWell(
                           onTap: () {
+                            flagChatPage = 0;
                             Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(
                               allChatsDetail[index].user_id_title,
                               1,

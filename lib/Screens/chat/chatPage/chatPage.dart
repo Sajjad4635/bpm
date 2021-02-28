@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bpm/Screens/chat/chatPage/Widgets/SendImageToServer.dart';
-import 'package:bpm/Screens/chat/chatPage/Widgets/test.dart';
+import 'package:bpm/Screens/chat/chatPage/Widgets/addTextToImage.dart';
 import 'package:bpm/Screens/chat/chatPage/chatPageModel.dart';
 import 'package:bpm/Screens/chat/chatPage/fechChatPage.dart';
 import 'package:bpm/Screens/chat/chatPage/sendTextToCustomer.dart';
@@ -65,6 +65,7 @@ class _ChatPageState extends State<ChatPage> {
     // TODO: implement initState
     super.initState();
 //    startTimer();
+    flagChatPage = 0;
     print("userId: " + widget.userId);
   }
 
@@ -158,6 +159,7 @@ class _ChatPageState extends State<ChatPage> {
 
     setState(() {
       if (flagChatPage == 0) {
+        print('ssssssssssssssssss');
         chats.clear();
         getAllLastChats();
         flagChatPage = 1;
@@ -555,7 +557,8 @@ class _ChatPageState extends State<ChatPage> {
                   child: InkWell(
                     onTap: () {
 //                      sendingForward();
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => test()));
+                    Navigator.pop(context);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AddTextToImage(widget.orderId, widget.userId)));
 //                      Navigator.pop(context);
                     },
                     child: Container(
@@ -747,14 +750,14 @@ Widget managerMessage(context, index) {
                   .size
                   .width / 2),
           decoration: BoxDecoration(
-              color: Color(0xff0DB0FC),
+              color: Color(0xff7BCDFF),
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(15.0),
                   bottomRight: Radius.circular(0.0),
                   topLeft: Radius.circular(15.0),
                   topRight: Radius.circular(15.0))),
           child: Container(
-              padding: const EdgeInsets.all(9.0),
+              padding: const EdgeInsets.all(5.0),
               child: Column(
                 children: <Widget>[
                   chats[index].result.message.image == null
@@ -768,21 +771,27 @@ Widget managerMessage(context, index) {
                                 .src}',
                           )));
                     },
-                    child: CachedNetworkImage(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width / 2,
-                      imageUrl: '${chats[index].result.message.image.src}',
-                      placeholder: (context, url) =>
-                          Container(
-                            alignment: Alignment.center,
-                            width: 50.0,
-                            height: 50.0,
-                            child: CircularProgressIndicator(),
-                          ),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      fit: BoxFit.cover,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15.0),
+                        topRight: Radius.circular(15.0)
+                      ),
+                      child: CachedNetworkImage(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width / 2,
+                        imageUrl: '${chats[index].result.message.image.src}',
+                        placeholder: (context, url) =>
+                            Container(
+                              alignment: Alignment.center,
+                              width: 50.0,
+                              height: 50.0,
+                              child: CircularProgressIndicator(),
+                            ),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   Text(
@@ -864,7 +873,7 @@ Widget managerMessage(context, index) {
                   .size
                   .width / 2),
           decoration: BoxDecoration(
-              color: Color(0xff0DB0FC),
+              color: Color(0xff7BCDFF),
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(15.0),
                   bottomRight: Radius.circular(0.0),
@@ -990,7 +999,7 @@ Widget managerMessage(context, index) {
                   .size
                   .width / 2),
           decoration: BoxDecoration(
-              color: Color(0xff0DB0FC),
+              color: Color(0xff7BCDFF),
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(15.0),
                   bottomRight: Radius.circular(0.0),
