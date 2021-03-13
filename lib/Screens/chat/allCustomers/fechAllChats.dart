@@ -10,6 +10,10 @@ class get_AllCustomers_Info {
   static Future<Map> get_allCustomers_info() async {
     SharedPreferences token = await SharedPreferences.getInstance();
 
+    print('${token.getString('myIP_token')}');
+    print('${token.getString('pkg')}');
+    print('${token.getString('my_device')}');
+
     final response = await http.post(api.siteName + '/panel/chatorderrooms.json',
     body: {
       "token": '${token.getString('myIP_token')}',
@@ -18,6 +22,9 @@ class get_AllCustomers_Info {
     });
     print(response.statusCode);
     print(response.body);
+    if(response.statusCode == 401){
+      print('sssssssssssssssssssssssssssssssssss');
+    }
     if (response.statusCode == 200) {
       var responseBody = json.decode(response.body);
       List<getAllCustomers> getchatsfs = [];
@@ -29,5 +36,10 @@ class get_AllCustomers_Info {
         "empty": getchatsfs.isEmpty ? true : false
       };
     }
+//    else if(response.statusCode == 401){
+//      await get_allCustomers_info();
+//    } else if(response.statusCode == 500){
+//      await get_allCustomers_info();
+//    }
   }
 }

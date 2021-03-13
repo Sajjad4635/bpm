@@ -187,6 +187,7 @@ class Message {
   String time;
   Image image;
   Document document;
+  Voice voice;
 
   Message(
       {this.id, this.userId, this.text, this.time, this.image, this.document});
@@ -197,9 +198,8 @@ class Message {
     text = json['text'];
     time = json['time'];
     image = json['image'] != null ? new Image.fromJson(json['image']) : null;
-    document = json['document'] != null
-        ? new Document.fromJson(json['document'])
-        : null;
+    document = json['document'] != null ? new Document.fromJson(json['document']) : null;
+    voice = json['voice'] != null ? new Voice.fromJson(json['voice']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -270,6 +270,28 @@ class Document {
     data['showName'] = this.showName;
     data['src'] = this.src;
     data['size'] = this.size;
+    return data;
+  }
+}
+
+class Voice {
+  String duration;
+  String src;
+  String name;
+
+  Voice({this.duration, this.src, this.name});
+
+  Voice.fromJson(Map<String, dynamic> json) {
+    duration = json['duration'];
+    src = json['src'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['duration'] = this.duration;
+    data['src'] = this.src;
+    data['name'] = this.name;
     return data;
   }
 }

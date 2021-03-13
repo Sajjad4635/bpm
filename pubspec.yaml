@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 1.0.1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -23,7 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  http: ^0.12.0
+  http: ^0.12.2
   shared_preferences: ^0.5.7+3
   connectivity: ^2.0.1
   flutter_custom_clippers: ^1.1.0
@@ -33,8 +33,21 @@ dependencies:
   flutter_animated_dialog: ^1.2.0
   device_info: ^1.0.0
   url_launcher: ^5.7.10
-  flutter_svg: ^0.18.0
+  flutter_svg: ^0.19.3
   sqflite: ^1.3.2+3
+  file_picker: ^2.1.6
+  audioplayers: ^0.17.4
+  flutter_audio_recorder: ^0.5.5
+  path_provider: ^1.6.24
+  flutter_launcher_icons: ^0.8.0
+  firebase_messaging: ^7.0.3
+  marquee_widget: ^0.8.0
+  steps_indicator: ^1.3.0
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/PSP_Profile.png"
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -58,6 +71,7 @@ flutter:
 
   assets:
     - images/logo.jpeg
+    - images/PSP_Profile.png
     - images/Mobilelogin-bro.png
     - images/Warning-rafiki.png
     - images/phoneNumimg.jpg
@@ -71,6 +85,14 @@ flutter:
     - images/operation.svg
     - images/clipboard.svg
     - images/double-check.svg
+    - images/chat.svg
+    - images/user1.png
+    - images/user2.png
+    - images/user3.png
+    - images/user4.png
+    - images/user5.png
+    - images/user6.png
+    - images/user7.png
 
   fonts:
     - family: iran_yekan

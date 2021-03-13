@@ -1,7 +1,11 @@
 import 'package:bpm/Screens/SplashScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+  ));
   runApp(new MaterialApp(
     debugShowCheckedModeBanner: false,
     home: SplashScreen(),

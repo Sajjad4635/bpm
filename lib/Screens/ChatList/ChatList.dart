@@ -1,12 +1,12 @@
 import 'package:bpm/Screens/chat/allCustomers/allChatsView.dart';
 import 'package:flutter/material.dart';
 
-class Operation extends StatefulWidget {
+class ChatList extends StatefulWidget {
   @override
-  _OperationState createState() => _OperationState();
+  _ChatListState createState() => _ChatListState();
 }
 
-class _OperationState extends State<Operation> {
+class _ChatListState extends State<ChatList> {
   @override
   Widget build(BuildContext context) {
     return Container(

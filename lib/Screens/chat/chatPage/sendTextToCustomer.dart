@@ -8,6 +8,17 @@ class send_Text_To_Customer {
   static Future<Map> send_text_to_customer(text, time, customerID, orderId) async {
 
     SharedPreferences token = await SharedPreferences.getInstance();
+
+    print('flaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaag');
+    print('${token.getString('myIP_token')}');
+    print('${token.getString('pkg')}');
+    print('${token.getString('my_device')}');
+    print('${text.toString()}');
+    print('${orderId.toString()}');
+    print('${customerID.toString()}');
+    print('1');
+    print('flaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaag');
+
     final response = await http.post(api.siteName + '/panel/chatsendmessage.json', body: {
       "token": '${token.getString('myIP_token')}',
       "pkg": '${token.getString('pkg')}',

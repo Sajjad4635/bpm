@@ -5,12 +5,25 @@ import 'package:bpm/Screens/chat/chatPage/chatPage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+var sendContainer = Container(
+  width: 45.0,
+  height: 45.0,
+  decoration: BoxDecoration(
+      color: Colors.blueAccent,
+      borderRadius: BorderRadius.all(
+          Radius.circular(100.0))),
+  child: Center(
+    child:
+    Icon(Icons.send, textDirection: TextDirection.rtl, color: Colors.white),
+  ),
+);
+
 class AddTextToImage extends StatefulWidget {
 
-  var orderId, userId;
+  var type, orderId, userId;
 
 
-  AddTextToImage(this.orderId, this.userId);
+  AddTextToImage(this.type, this.orderId, this.userId);
 
   @override
   _AddTextToImageState createState() => _AddTextToImageState();
@@ -93,22 +106,12 @@ class _AddTextToImageState extends State<AddTextToImage> {
                     height: 60.0,
                     child: Row(
                       children: [
-                        Container(
-                          width: 45.0,
-                          height: 45.0,
-                          decoration: BoxDecoration(
-                              color: Colors.blueAccent,
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(100.0))),
-                          child: Center(
-                            child:
-                            IconButton(
-                              icon: Icon(Icons.send, textDirection: TextDirection.rtl, color: Colors.white),
-                              onPressed: (){
-                                addImage(_image);
-                              },
-                            )
-                          ),
+                        InkWell(
+                          onTap: (){
+                            conForward();
+                            addImage(_image);
+                          },
+                          child: sendContainer,
                         ),
                         Expanded(
                           child: Container(
@@ -130,8 +133,9 @@ class _AddTextToImageState extends State<AddTextToImage> {
                                     hintStyle: TextStyle(
                                         fontSize: 14.0,
                                         fontFamily: 'iran_yekan',
-                                        color: Color(0xff8F8E8E)
-                                    )
+                                        color: Color(0xff8F8E8E),
+                                    ),
+                                  border: InputBorder.none,
                                 ),
                               ),
                             ),
@@ -158,7 +162,14 @@ class _AddTextToImageState extends State<AddTextToImage> {
   File _image;
 
   Future getImageFromGallery() async {
-    var pickedFile = await picker.getImage(source: ImageSource.gallery);
+    var pickedFile;
+
+    if(widget.type == 'gallery'){
+      pickedFile = await picker.getImage(source: ImageSource.gallery);
+    }else if(widget.type == 'camera'){
+      pickedFile = await picker.getImage(source: ImageSource.camera);
+    }
+
     setState(() {
       _image = File(pickedFile.path);
     });
@@ -171,9 +182,40 @@ class _AddTextToImageState extends State<AddTextToImage> {
         widget.userId);
     if(response['status'] == 200){
       setState(() {
-//        flagChatPage = 0;
+        flagChatPage = 0;
       });
-      Navigator.pop(context, flagChatPage = 0);
+      conBack();
+      print('aaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbb');
+      Navigator.pop(context);
     }
+  }
+
+  conForward() {
+    setState(() {
+      sendContainer = Container(
+        width: 45.0,
+        height: 45.0,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    });
+  }
+
+  conBack(){
+    setState(() {
+      sendContainer = Container(
+        width: 45.0,
+        height: 45.0,
+        decoration: BoxDecoration(
+            color: Colors.blueAccent,
+            borderRadius: BorderRadius.all(
+                Radius.circular(100.0))),
+        child: Center(
+          child:
+          Icon(Icons.send, textDirection: TextDirection.rtl, color: Colors.white),
+        ),
+      );
+    });
   }
 }
