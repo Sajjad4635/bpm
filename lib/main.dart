@@ -1,4 +1,5 @@
-import 'package:bpm/Screens/SplashScreen.dart';
+import 'file:///C:/Users/SAJJAD/Documents/GitHub/bpm/lib/Screens/SplashScreen/SplashScreen.dart';
+import 'package:bpm/global/loadingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -7,7 +8,7 @@ void main() async {
     statusBarColor: Colors.transparent,
   ));
   runApp(new MaterialApp(
-    debugShowCheckedModeBanner: false,
+//    debugShowCheckedModeBanner: false,
     home: SplashScreen(),
 //    routes: <String, WidgetBuilder>{
 //      '/phoneNumber': (BuildContext context) => new phoneNumber(),
@@ -18,3 +19,4 @@ void main() async {
 //    },
   ));
 }
+

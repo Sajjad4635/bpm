@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bpm/API/api.dart';
+import 'package:bpm/Screens/CardBoardMonitoring/CardBoardMonitoring.dart';
 import 'package:bpm/Screens/Cardboard/Cardboard.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -80,6 +81,7 @@ class _FirstScreenState extends State<FirstScreen> {
   }
 
   static List<Widget> ScreensList = <Widget>[
+    CardBoardMonitoring(),
     Cardboard(),
     AllCustomers(),
   ];
@@ -279,7 +281,7 @@ class _FirstScreenState extends State<FirstScreen> {
                                   ? Colors.blueAccent
                                   : Colors.black54,),
                             Text(
-                              'کارتابل',
+                              'کارتابل نظارتی',
                               textDirection: TextDirection.rtl,
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -298,8 +300,41 @@ class _FirstScreenState extends State<FirstScreen> {
                     child: InkWell(
                       onTap: (){
                         setState(() {
-                          flagAllCustomers = 0;
                           widget.selecteIdex = 1;
+                        });
+                      },
+                      child: Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SvgPicture.asset('images/clipboard.svg',
+                              width: 23.0,
+                              height: 23.0,
+                              color: widget.selecteIdex == 1
+                                  ? Colors.blueAccent
+                                  : Colors.black54,),
+                            Text(
+                              'کارتابل اجرایی',
+                              textDirection: TextDirection.rtl,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: 'iran_yekan',
+                                fontSize: 12.0,
+                                color: widget.selecteIdex == 1
+                                    ? Colors.blueAccent
+                                    : Colors.black54,),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                ),
+                Expanded(
+                    child: InkWell(
+                      onTap: (){
+                        setState(() {
+                          flagAllCustomers = 0;
+                          widget.selecteIdex = 2;
                         });
                       },
                       child: Container(
@@ -309,7 +344,7 @@ class _FirstScreenState extends State<FirstScreen> {
                             SvgPicture.asset('images/chat.svg',
                               width: 23.0,
                               height: 23.0,
-                              color: widget.selecteIdex == 1
+                              color: widget.selecteIdex == 2
                                   ? Colors.blueAccent
                                   : Colors.black54,),
                             Text(
@@ -319,7 +354,7 @@ class _FirstScreenState extends State<FirstScreen> {
                               style: TextStyle(
                                 fontFamily: 'iran_yekan',
                                 fontSize: 12.0,
-                                color:  widget.selecteIdex == 1
+                                color:  widget.selecteIdex == 2
                                     ? Colors.blueAccent
                                     : Colors.black54,),
                             ),
@@ -513,9 +548,10 @@ class _FirstScreenState extends State<FirstScreen> {
     saveIpToken(firebase_token);
 
     print('fireBaseToken::::::::::::: $firebase_token');
+
     print('aaaaaaaaaaaaaaa');
     SharedPreferences token = await SharedPreferences.getInstance();
-
+    print('Token::::::::::::: ${token.getString('myIP_token')}');
     var response = await http.post(api.siteName + '/panel/customerappconfig.json', body: {
       "version_code": '${100000}',
       "firebase_token": '${firebase_token.toString()}',

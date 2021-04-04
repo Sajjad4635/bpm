@@ -43,6 +43,8 @@ dependencies:
   firebase_messaging: ^7.0.3
   marquee_widget: ^0.8.0
   steps_indicator: ^1.3.0
+  flutter_spinkit: ^5.0.0
+  font_awesome_flutter: ^9.0.0
 
 flutter_icons:
   android: "launcher_icon"
@@ -86,6 +88,18 @@ flutter:
     - images/clipboard.svg
     - images/double-check.svg
     - images/chat.svg
+    - images/attachment.svg
+    - images/taskDone.svg
+    #card board icons
+    - images/cardBoardIcons/waitForCheck.svg
+    - images/cardBoardIcons/waitForFactor.svg
+    - images/cardBoardIcons/loading.svg
+    - images/cardBoardIcons/checkForFinalSend.svg
+    - images/cardBoardIcons/sendFactorToCustomer.svg
+    - images/cardBoardIcons/checkFactorByCustomer.svg
+    - images/cardBoardIcons/finalChecked.svg
+    - images/cardBoardIcons/internationalPost.svg
+    #card board icons
     - images/user1.png
     - images/user2.png
     - images/user3.png
@@ -93,6 +107,7 @@ flutter:
     - images/user5.png
     - images/user6.png
     - images/user7.png
+    - images/stepBackGround.png
 
   fonts:
     - family: iran_yekan

@@ -183,127 +183,119 @@ class _AllCustomersState extends State<AllCustomers> {
                                             fit: BoxFit.cover)),
                                   ),
                                   Expanded(
-                                    flex: 7,
                                     child: Column(
                                       children: [
                                         Expanded(
-                                          child: Container(
-                                            padding: EdgeInsets.only(
-                                                right: pageWidth / 30.0),
-                                            alignment: Alignment.centerRight,
-                                            child: Marquee(
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.all(Radius.circular(35.0)),
+                                          child: Row(
+                                            textDirection: TextDirection.rtl,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    right: pageWidth / 30.0),
+                                                alignment: Alignment.centerRight,
+                                                child: Text(
+                                                  allChatsDetail[index].user_id_title == null
+                                                      ? 'بدون نام'
+                                                      : '${doNotShowEnglish(allChatsDetail[index].user_id_title)}- ${allChatsDetail[index].order_tn_title}',
+                                                  textDirection: TextDirection.rtl,
+                                                  style: TextStyle(
+                                                    fontFamily: 'iran_yekan',
+                                                    color: mainColor,
+                                                    fontSize: 16.0,
+                                                  ),
                                                 ),
-                                                child: Container(
-                                                  child: Text(
-                                                    allChatsDetail[index].user_id_title == null
-                                                        ? 'بدون نام'
-                                                        : '${doNotShowEnglish(allChatsDetail[index].user_id_title)}- ${allChatsDetail[index].order_tn_title}',
-                                                    textDirection: TextDirection.rtl,
-                                                    style: TextStyle(
-                                                      fontFamily: 'iran_yekan',
-                                                      color: mainColor,
-                                                      fontSize: 16.0,
+                                              ),
+                                              Container(
+                                                alignment: Alignment.topLeft,
+                                                child: ((allChatsDetail[index].unread_expert == null) || (allChatsDetail[index].unread_expert == '0'))
+                                                    ? Container()
+                                                    : ClipOval(
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    width: 20.0,
+                                                    height: 20.0,
+                                                    color: Color(0xff311b92),
+                                                    child: Text(
+                                                      int.parse(allChatsDetail[index].unread_expert) < 99
+                                                          ? '${allChatsDetail[index].unread_expert}'
+                                                          : '+99',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 10.0,
+                                                          fontFamily: 'iran_yekan'
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                              direction: Axis.horizontal,
-                                              textDirection: TextDirection.rtl,
-                                              animationDuration: Duration(seconds: 1),
-                                              backDuration: Duration(milliseconds: 1000),
-                                              pauseDuration: Duration(milliseconds: 100),
-                                              directionMarguee: DirectionMarguee.TwoDirection,
-                                            )
-                                          ),
+                                            ],
+                                          )
                                         ),
                                         Expanded(
-                                          child: Container(
-                                            padding: EdgeInsets.only(
-                                                right: pageWidth / 30.0),
-                                            alignment: Alignment.centerRight,
-                                            child: Text(
-                                              allChatsDetail[index].last_message == null
-                                                  ? ''
-                                                  : allChatsDetail[index]
-                                                  .last_message,
-                                              textDirection: TextDirection.rtl,
-                                              style: TextStyle(
-                                                fontFamily: 'iran_yekan',
-                                                color: mainColor,
-                                                fontSize: 12.0,
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 4,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Container(
-                                          alignment: Alignment.topLeft,
-                                          child: ((allChatsDetail[index].unread_expert == null) || (allChatsDetail[index].unread_expert == '0'))
-                                              ? Container()
-                                              : ClipOval(
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              width: 20.0,
-                                              height: 20.0,
-                                              color: Color(0xff311b92),
-                                              child: Text(
-                                                int.parse(allChatsDetail[index].unread_expert) < 99
-                                                    ? '${allChatsDetail[index].unread_expert}'
-                                                    : '+99',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 10.0,
-                                                    fontFamily: 'iran_yekan'
+                                          child: Row(
+                                            textDirection: TextDirection.rtl,
+                                            children: [
+                                              Expanded(
+                                                flex: 6,
+                                                child: Container(
+                                                  padding: EdgeInsets.only(
+                                                      right: pageWidth / 30.0),
+                                                  alignment: Alignment.centerRight,
+                                                  child: Text(
+                                                    allChatsDetail[index].last_message == null
+                                                        ? ''
+                                                        : allChatsDetail[index]
+                                                        .last_message,
+                                                    textDirection: TextDirection.rtl,
+                                                    style: TextStyle(
+                                                      fontFamily: 'iran_yekan',
+                                                      color: mainColor,
+                                                      fontSize: 12.0,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          alignment: Alignment.bottomLeft,
-                                          child: '${(DateTime.fromMillisecondsSinceEpoch(int.parse(allChatsDetail[index].last_message_date) * 1000)).toString().split(' ')[0]}'
-                                              == '${DateTime.now().year}-${DateTime.now().month < 10 ? '0${DateTime.now().month}' : DateTime.now().month}-${DateTime.now().day < 10 ? '0${DateTime.now().day}' : DateTime.now().day}'
-                                              ? Text(
-                                            '${(DateTime.fromMillisecondsSinceEpoch(int.parse(allChatsDetail[index].last_message_date) * 1000)).toString().split(' ')[1].split(':')[0]}' +
-                                                ':' +
-                                                '${(DateTime.fromMillisecondsSinceEpoch(int.parse(allChatsDetail[index].last_message_date) * 1000)).toString().split(' ')[1].split(':')[1]}',
-                                            textDirection: TextDirection.rtl,
-                                            style: TextStyle(
-                                              fontSize: 10.0,
-                                              fontFamily: 'iran_yekan',
-                                              color: Colors.black,
-                                            ),
-                                          )
-                                              : '${(DateTime.fromMillisecondsSinceEpoch(int.parse(allChatsDetail[index].last_message_date) * 1000)).toString().split(' ')[0]}'
-                                              == '${DateTime.now().year}-${DateTime.now().month < 10 ? '0${DateTime.now().month}' : DateTime.now().month}-${DateTime.now().day-1 < 10 ? '0${DateTime.now().day-1}' : DateTime.now().day-1}'
-                                              ? Text(
-                                            'دیروز',
-                                            textDirection: TextDirection.rtl,
-                                            style: TextStyle(
-                                              fontSize: 10.0,
-                                              fontFamily: 'iran_yekan',
-                                              color: Colors.black,
-                                            ),
-                                          )
-                                              : Text(
-                                            '${allChatsDetail[index].last_message_date_title.toString().split('   ')[0]}',
-                                            textDirection: TextDirection.rtl,
-                                            style: TextStyle(
-                                              fontSize: 10.0,
-                                              fontFamily: 'iran_yekan',
-                                              color: Colors.black,
-                                            ),
-                                          ),
+                                              Expanded(
+                                                flex: 4,
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      alignment: Alignment.bottomLeft,
+                                                      child: '${(DateTime.fromMillisecondsSinceEpoch(int.parse(allChatsDetail[index].last_message_date) * 1000)).toString().split(' ')[0]}'
+                                                          == '${DateTime.now().year}-${DateTime.now().month < 10 ? '0${DateTime.now().month}' : DateTime.now().month}-${DateTime.now().day < 10 ? '0${DateTime.now().day}' : DateTime.now().day}'
+                                                          ? Text(
+                                                        '${(DateTime.fromMillisecondsSinceEpoch(int.parse(allChatsDetail[index].last_message_date) * 1000)).toString().split(' ')[1].split(':')[0]}' +
+                                                            ':' +
+                                                            '${(DateTime.fromMillisecondsSinceEpoch(int.parse(allChatsDetail[index].last_message_date) * 1000)).toString().split(' ')[1].split(':')[1]}',
+                                                        textDirection: TextDirection.rtl,
+                                                        style: TextStyle(
+                                                          fontSize: 10.0,
+                                                          fontFamily: 'iran_yekan',
+                                                          color: Colors.black,
+                                                        ),
+                                                      )
+                                                          : '${(DateTime.fromMillisecondsSinceEpoch(int.parse(allChatsDetail[index].last_message_date) * 1000)).toString().split(' ')[0]}'
+                                                          == '${DateTime.now().year}-${DateTime.now().month < 10 ? '0${DateTime.now().month}' : DateTime.now().month}-${DateTime.now().day-1 < 10 ? '0${DateTime.now().day-1}' : DateTime.now().day-1}'
+                                                          ? Text(
+                                                        'دیروز',
+                                                        textDirection: TextDirection.rtl,
+                                                        style: TextStyle(
+                                                          fontSize: 10.0,
+                                                          fontFamily: 'iran_yekan',
+                                                          color: Colors.black,
+                                                        ),
+                                                      )
+                                                          : Text(
+                                                        '${allChatsDetail[index].last_message_date_title.toString().split('   ')[0]}',
+                                                        textDirection: TextDirection.rtl,
+                                                        style: TextStyle(
+                                                          fontSize: 10.0,
+                                                          fontFamily: 'iran_yekan',
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
 //                                      Text(
 //                                          '${(DateTime.fromMillisecondsSinceEpoch(int.parse(allChatsDetail[index].last_message_date)*1000)).toString().split(' ')[0]}'
 ////                                          '${DateTime.now().year}-${DateTime.now().month < 10 ? '0${DateTime.now().month}' : DateTime.now().month}-${DateTime.now().day < 10 ? '0${DateTime.now().day}' : DateTime.now().day}'
@@ -311,11 +303,16 @@ class _AllCustomersState extends State<AllCustomers> {
 //                                      Text(
 //                                        '${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}'
 //                                      )
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         )
                                       ],
                                     ),
                                   ),
-
 
 //                                Expanded(
 //                                  child: Container(

@@ -67,8 +67,7 @@ class allChats {
     userIdCreatedTitle = json['user_id_created_title'];
     attachFileTitle = json['attach_file_title'];
     userIdTitle = json['user_id_title'];
-    result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+    result = json['result'] != null ? new Result.fromJson(json['result']) : null;
     id = json['id'];
     orderId = json['order_id'];
     cancustomerview = json['cancustomerview'];
