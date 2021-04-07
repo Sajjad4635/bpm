@@ -75,7 +75,6 @@ class _AllCustomersState extends State<AllCustomers> {
 
     setState(() {
       if(flagAllCustomers == 0){
-        allChatsDetail.clear();
         getAllChatsData();
         flagAllCustomers = 1;
       }
@@ -175,6 +174,9 @@ class _AllCustomersState extends State<AllCustomers> {
                                     width: 50.0,
                                     height: 50.0,
                                     decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: themeColor
+                                      ),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(100.0)),
                                         image: DecorationImage(
@@ -202,7 +204,7 @@ class _AllCustomersState extends State<AllCustomers> {
                                                   style: TextStyle(
                                                     fontFamily: 'iran_yekan',
                                                     color: mainColor,
-                                                    fontSize: 16.0,
+                                                    fontSize: 15.0,
                                                   ),
                                                 ),
                                               ),

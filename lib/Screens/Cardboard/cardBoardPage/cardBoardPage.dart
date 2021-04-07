@@ -6,6 +6,7 @@ import 'package:bpm/style/Colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 List<cardBoardPageModel> taskList = new List();
 var forceWorkNumber;
@@ -56,8 +57,10 @@ class _cardBoardPageState extends State<cardBoardPage> {
                             child: Text(
                               'اطلاعاتی وجود ندارد!',
                               textDirection: TextDirection.rtl,
-                              style:
-                                  TextStyle(fontFamily: 'iran_yekan', color: themeColor, fontSize: 15.0),
+                              style: TextStyle(
+                                  fontFamily: 'iran_yekan',
+                                  color: themeColor,
+                                  fontSize: 15.0),
                             ),
                           ),
                         )
@@ -86,8 +89,10 @@ class _cardBoardPageState extends State<cardBoardPage> {
                               },
                               child: Container(
                                 height: MediaQuery.of(context).size.height / 4,
-                                margin: EdgeInsets.only(left: 10.0, right: 10.0),
-                                padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                                margin:
+                                    EdgeInsets.only(left: 10.0, right: 10.0),
+                                padding:
+                                    EdgeInsets.only(left: 10.0, right: 10.0),
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius:
@@ -104,7 +109,9 @@ class _cardBoardPageState extends State<cardBoardPage> {
                                               MainAxisAlignment.spaceEvenly,
                                           children: [
                                             Text(
-                                              'شماره سفارش : ${taskList[index].tn}',
+                                              taskList[index].tn == null
+                                                  ? 'شماره سفارش : -'
+                                                  : 'شماره سفارش : ${taskList[index].tn}',
                                               textDirection: TextDirection.rtl,
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
@@ -113,8 +120,11 @@ class _cardBoardPageState extends State<cardBoardPage> {
                                                   color: themeColor),
                                             ),
                                             Text(
-                                              doNotShowEnglish(
-                                                  'صاحب سفارش : ${taskList[index].userIdOwnerTitle}'),
+                                              taskList[index]
+                                                          .userIdOwnerTitle == null
+                                                  ? 'صاحب سفارش : -'
+                                                  : doNotShowEnglish(
+                                                      'صاحب سفارش : ${taskList[index].userIdOwnerTitle}'),
                                               textDirection: TextDirection.rtl,
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
@@ -123,8 +133,11 @@ class _cardBoardPageState extends State<cardBoardPage> {
                                                   color: themeColor),
                                             ),
                                             Text(
-                                              doNotShowEnglish(
-                                                  'مدیر مشتری : ${taskList[index].userIdCreatedTitle}'),
+                                              taskList[index]
+                                                          .userIdCreatedTitle == null
+                                                  ? 'مدیر مشتری : -'
+                                                  : doNotShowEnglish(
+                                                      'مدیر مشتری : ${taskList[index].userIdCreatedTitle}'),
                                               textDirection: TextDirection.rtl,
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
@@ -133,7 +146,10 @@ class _cardBoardPageState extends State<cardBoardPage> {
                                                   color: themeColor),
                                             ),
                                             Text(
-                                              'وضعیت : ${taskList[index].orderStatusTitle}',
+                                              taskList[index]
+                                                          .orderStatusTitle == null
+                                                  ? 'وضعیت : -'
+                                                  : 'وضعیت : ${taskList[index].orderStatusTitle}',
                                               textDirection: TextDirection.rtl,
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
@@ -149,22 +165,26 @@ class _cardBoardPageState extends State<cardBoardPage> {
                                       flex: 3,
                                       child: Container(
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
                                           children: [
                                             GestureDetector(
-                                              onTap: (){
+                                              onTap: () {
                                                 postponing();
                                               },
                                               child: Container(
                                                 height: 30.0,
                                                 decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                                                  color: themeColor
-                                                ),
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                5.0)),
+                                                    color: themeColor),
                                                 child: Center(
                                                   child: Text(
                                                     'به تعویق انداختن',
-                                                    textDirection: TextDirection.rtl,
+                                                    textDirection:
+                                                        TextDirection.rtl,
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                         fontSize: 12.0,
@@ -175,46 +195,55 @@ class _cardBoardPageState extends State<cardBoardPage> {
                                               ),
                                             ),
                                             GestureDetector(
-                                              onTap: (){
+                                              onTap: () {
                                                 addDescription();
                                               },
                                               child: Container(
                                                 height: 30.0,
                                                 decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                                                    color: themeColor
-                                                ),
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                5.0)),
+                                                    color: themeColor),
                                                 child: Center(
                                                   child: Text(
                                                     'توضیحات',
-                                                    textDirection: TextDirection.rtl,
+                                                    textDirection:
+                                                        TextDirection.rtl,
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                         fontSize: 12.0,
-                                                        fontFamily: 'iran_yekan',
+                                                        fontFamily:
+                                                            'iran_yekan',
                                                         color: Colors.white),
                                                   ),
                                                 ),
                                               ),
                                             ),
                                             GestureDetector(
-                                              onTap: (){
-
+                                              onTap: () {
+                                                launchURL(
+                                                    'https://fatertejarat.com');
                                               },
                                               child: Container(
                                                 height: 30.0,
                                                 decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                                                    color: themeColor
-                                                ),
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                5.0)),
+                                                    color: themeColor),
                                                 child: Center(
                                                   child: Text(
                                                     'عملیات',
-                                                    textDirection: TextDirection.rtl,
+                                                    textDirection:
+                                                        TextDirection.rtl,
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                         fontSize: 12.0,
-                                                        fontFamily: 'iran_yekan',
+                                                        fontFamily:
+                                                            'iran_yekan',
                                                         color: Colors.white),
                                                   ),
                                                 ),
@@ -275,10 +304,10 @@ class _cardBoardPageState extends State<cardBoardPage> {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return StatefulBuilder(builder: (context, setState){
+        return StatefulBuilder(builder: (context, setState) {
           return Dialog(
-            shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
             //this right here
             child: Container(
               height: MediaQuery.of(context).size.height / 2,
@@ -362,13 +391,15 @@ class _cardBoardPageState extends State<cardBoardPage> {
                               value: value,
                               child: Container(
                                 alignment: Alignment.center,
-                                child: Text(value,
+                                child: Text(
+                                  value,
                                   textDirection: TextDirection.rtl,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontFamily: 'iran_yekan',
                                     fontSize: 14.0,
-                                  ),),
+                                  ),
+                                ),
                               ),
                             );
                           }).toList(),
@@ -400,7 +431,10 @@ class _cardBoardPageState extends State<cardBoardPage> {
                       textAlign: TextAlign.center,
                       cursorColor: mainColor,
                       autofocus: false,
-                      style: TextStyle(fontSize: 15.0, color: Colors.black, fontFamily: 'iran_yekan'),
+                      style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.black,
+                          fontFamily: 'iran_yekan'),
                       decoration: InputDecoration(
                         counter: Offstage(),
                         filled: true,
@@ -409,38 +443,37 @@ class _cardBoardPageState extends State<cardBoardPage> {
                         hintStyle: TextStyle(
                             fontSize: 12.0,
                             fontFamily: 'iran_yekan',
-                            color: Colors.black38
-                        ),
-                        contentPadding:
-                        const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+                            color: Colors.black38),
+                        contentPadding: const EdgeInsets.only(
+                            left: 14.0, bottom: 8.0, top: 8.0),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: themeColor),
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         border: OutlineInputBorder(
                           borderSide: new BorderSide(color: themeColor),
-                          borderRadius: BorderRadius.circular(10.0),),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
                       ),
                     ),
                   ),
                   GestureDetector(
-                    onTap: (){
-
-                    },
+                    onTap: () {},
                     child: Container(
                       width: 120.0,
                       height: 60.0,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                        color: themeColor
-                      ),
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                          color: themeColor),
                       child: Center(
                         child: Text(
                           'ثبت اطلاعات',
                           textDirection: TextDirection.rtl,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontSize: 15.0, fontFamily: 'iran_yekan', color: Colors.white),
+                              fontSize: 15.0,
+                              fontFamily: 'iran_yekan',
+                              color: Colors.white),
                         ),
                       ),
                     ),
@@ -456,15 +489,16 @@ class _cardBoardPageState extends State<cardBoardPage> {
       duration: Duration(seconds: 1),
     );
   }
-  addDescription(){
+
+  addDescription() {
     showAnimatedDialog(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return StatefulBuilder(builder: (context, setState){
+        return StatefulBuilder(builder: (context, setState) {
           return Dialog(
-            shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
             //this right here
             child: Container(
               height: MediaQuery.of(context).size.height / 3,
@@ -513,7 +547,10 @@ class _cardBoardPageState extends State<cardBoardPage> {
                       textAlign: TextAlign.center,
                       cursorColor: mainColor,
                       autofocus: false,
-                      style: TextStyle(fontSize: 15.0, color: Colors.black, fontFamily: 'iran_yekan'),
+                      style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.black,
+                          fontFamily: 'iran_yekan'),
                       decoration: InputDecoration(
                         counter: Offstage(),
                         filled: true,
@@ -522,38 +559,37 @@ class _cardBoardPageState extends State<cardBoardPage> {
                         hintStyle: TextStyle(
                             fontSize: 12.0,
                             fontFamily: 'iran_yekan',
-                            color: Colors.black38
-                        ),
-                        contentPadding:
-                        const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+                            color: Colors.black38),
+                        contentPadding: const EdgeInsets.only(
+                            left: 14.0, bottom: 8.0, top: 8.0),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: themeColor),
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         border: OutlineInputBorder(
                           borderSide: new BorderSide(color: themeColor),
-                          borderRadius: BorderRadius.circular(10.0),),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
                       ),
                     ),
                   ),
                   GestureDetector(
-                    onTap: (){
-
-                    },
+                    onTap: () {},
                     child: Container(
                       width: 120.0,
                       height: 60.0,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                          color: themeColor
-                      ),
+                          color: themeColor),
                       child: Center(
                         child: Text(
                           'ثبت اطلاعات',
                           textDirection: TextDirection.rtl,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontSize: 15.0, fontFamily: 'iran_yekan', color: Colors.white),
+                              fontSize: 15.0,
+                              fontFamily: 'iran_yekan',
+                              color: Colors.white),
                         ),
                       ),
                     ),
@@ -570,6 +606,9 @@ class _cardBoardPageState extends State<cardBoardPage> {
     );
   }
 
+  launchURL(_url) async {
+    await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+  }
 }
 
 class showOrderDetail extends StatefulWidget {
@@ -730,7 +769,7 @@ class _showOrderDetailState extends State<showOrderDetail> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         showTimeDuration();
                       },
                       child: Container(
@@ -890,9 +929,10 @@ class _showOrderDetailState extends State<showOrderDetail> {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return StatefulBuilder(builder: (context, setState){
+        return StatefulBuilder(builder: (context, setState) {
           return Dialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
             //this right here
             child: Container(
               height: MediaQuery.of(context).size.height / 2,
@@ -920,16 +960,13 @@ class _showOrderDetailState extends State<showOrderDetail> {
                     flex: 1,
                     child: Container(
                       child: Center(
-                        child: Text(
-                            'انتخاب کنید',
+                        child: Text('انتخاب کنید',
                             textDirection: TextDirection.rtl,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 17.0,
                                 fontFamily: 'iran_yekan',
-                                color: themeColor
-                            )
-                        ),
+                                color: themeColor)),
                       ),
                     ),
                   ),
@@ -937,11 +974,11 @@ class _showOrderDetailState extends State<showOrderDetail> {
                     flex: 9,
                     child: ListView.builder(
                       itemCount: 8,
-                      itemBuilder: (context, index){
+                      itemBuilder: (context, index) {
                         return Card(
                           child: GestureDetector(
-                            onTap: (){
-                              setState((){
+                            onTap: () {
+                              setState(() {
                                 print(tiemsTitle[index]);
                               });
                             },
@@ -949,28 +986,23 @@ class _showOrderDetailState extends State<showOrderDetail> {
                               height: 50.0,
                               child: Row(
                                 textDirection: TextDirection.rtl,
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Text(
-                                      '${tiemsTitle[index]}',
+                                  Text('${tiemsTitle[index]}',
                                       textDirection: TextDirection.rtl,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 15.0,
                                           fontFamily: 'iran_yekan',
-                                          color: themeColor
-                                      )
-                                  ),
-                                  Text(
-                                      'ساعت',
+                                          color: themeColor)),
+                                  Text('ساعت',
                                       textDirection: TextDirection.rtl,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 15.0,
                                           fontFamily: 'iran_yekan',
-                                          color: themeColor
-                                      )
-                                  ),
+                                          color: themeColor)),
                                 ],
                               ),
                             ),

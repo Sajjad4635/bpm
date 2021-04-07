@@ -1,8 +1,8 @@
-import 'dart:async';
-
-import 'package:bpm/API/api.dart';
 import 'package:bpm/Screens/CardBoardMonitoring/CardBoardMonitoring.dart';
 import 'package:bpm/Screens/Cardboard/Cardboard.dart';
+import 'package:bpm/Screens/FirstScreen/fechUser.dart';
+import 'package:bpm/global/glabalVariables.dart';
+import 'package:bpm/global/loadingPage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bpm/Screens/Login/PhoneNumber.dart';
@@ -13,47 +13,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:http/http.dart' as http;
-
-var drawerTitleList = [
-  'پیشخوان',
-  'کارتابل من',
-  'اطلاع رسانی و آموزش',
-  'پیام های من',
-  'سفارش ها',
-  'گزارش های مدیریتی',
-  'گزارش های فنی',
-  'انبار ها',
-  'نرخ های ارز',
-  'پرداخت',
-  'گفت و گو با مشتری',
-  'شماره تلفن های داخلی هلدینگ',
-  'پیغام های مشتریان',
-  'پروفایل کاربری',
-  'تغییر کلمه عبور',
-  'خروج',
-];
-
-var drawerIconList = [
-  Icons.apps,
-  Icons.folder,
-  Icons.add_alarm_sharp,
-  Icons.inbox,
-  Icons.line_style,
-  Icons.timeline,
-  Icons.bug_report,
-  Icons.stacked_bar_chart,
-  Icons.monetization_on,
-  Icons.attach_money,
-  Icons.comment,
-  Icons.phone,
-  Icons.unarchive,
-  Icons.contact_mail,
-  Icons.lock,
-  Icons.arrow_forward,
-];
 
 final GlobalKey<ScaffoldState> _FirstScreenScaffoldKey = new GlobalKey<ScaffoldState>();
+
+var personName;
+
+var totalActionCartable;
+var totalReviewCartable;
 
 var flagFirstScreen = 0;
 
@@ -76,7 +42,7 @@ class _FirstScreenState extends State<FirstScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    checkFirebaseToken();
+    getUserDetail();
 //    getUserDetail();
   }
 
@@ -88,12 +54,6 @@ class _FirstScreenState extends State<FirstScreen> {
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      if(flagFirstScreen == 0){
-        flagFirstScreen = 1;
-      }
-    });
-
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
@@ -102,7 +62,19 @@ class _FirstScreenState extends State<FirstScreen> {
             colorFilter: new ColorFilter.mode(Colors.blue.withOpacity(0.15), BlendMode.dstATop),
           )
       ),
-      child: Scaffold(
+      child: (personName == null) && (empty == false)
+          ? LoadingPage()
+          : (personName == null) && (empty == true)
+          ? Container(
+        child: Center(
+          child: Text(
+            'پیامی وجود ندارد!',
+            textDirection: TextDirection.rtl,
+            style: TextStyle(fontFamily: 'Aviny', color: mainColor),
+          ),
+        ),
+      )
+          : Scaffold(
           key: _FirstScreenScaffoldKey,
           backgroundColor: Colors.transparent,
           endDrawer: Directionality(
@@ -119,7 +91,7 @@ class _FirstScreenState extends State<FirstScreen> {
                         colorFilter: new ColorFilter.mode(Colors.blue.withOpacity(0.15), BlendMode.dstATop),
                       )
                   ),
-                  width: 300,
+//                  width: 300,
                   child: SafeArea(
                     child: Container(
                       child: Column(
@@ -134,26 +106,22 @@ class _FirstScreenState extends State<FirstScreen> {
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-//                                 gradient: LinearGradient(
-//                                   colors: [Color(0xff00d170), Color(0xff00d170)],
-//                                 )
                                     ),
-//                              child: CircleAvatar(
-//                                radius: 40,
-//                                backgroundImage: AssetImage('images/Nerd-bro.png'),
-//                              ),
+                                    child: Image.asset('images/user1.png'),
                                   ),
                                 ),
                                 Expanded(
                                   flex: 2,
-                                  child: FittedBox(
-                                    fit: BoxFit.contain,
+                                  child: Center(
                                     child: Text(
-                                      '${widget.userName.toString()}',
+                                      '${personName.toString()}',
+                                      textDirection: TextDirection.rtl,
+                                      textAlign: TextAlign.center,
                                       style: TextStyle(
-                                          color: mainColor,
+                                          color: themeColor,
                                           fontFamily: 'iran_yekan',
-                                          fontSize: 18.0
+                                          fontSize: 18.0,
+                                        fontWeight: FontWeight.w600
                                       ),
                                     ),
                                   ),
@@ -166,24 +134,52 @@ class _FirstScreenState extends State<FirstScreen> {
                             flex: 8,
                             child: Container(
                               padding: const EdgeInsets.only(left: 30.0),
-                              child: ListView.separated(
-                                separatorBuilder: (context, index){
-                                  return SizedBox(height: 5.0,);
-                                },
-                                itemCount: drawerTitleList.length,
-                                itemBuilder: (context, index){
-                                  return InkWell(
+                              child: Column(
+                                children: [
+                                  InkWell(
                                     onTap: () {
-                                      navigatorRoot(index, context);
+
                                     },
                                     child: _buildRow(
-                                        drawerIconList[index],
+                                        Icons.timeline,
                                         Text(
-                                          "${drawerTitleList[index].toString()}",
+                                          "گزارش پورسانت",
                                         )),
-                                  );
-                                },
-                              ),
+                                  ),
+                                  Container(
+                                    height: 1,
+                                    color: themeColor,
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+
+                                    },
+                                    child: _buildRow(
+                                        Icons.sticky_note_2_outlined,
+                                        Text(
+                                          "گزارش عملکرد",
+                                        )),
+                                  ),
+                                  Container(
+                                    height: 1,
+                                    color: themeColor,
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      deleteToken();
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => phoneNumber()));
+                                    },
+                                    child: _buildRow(
+                                        Icons.exit_to_app,
+                                        Text(
+                                          "خروج",
+                                        )),
+                                  ),
+                                ],
+                              )
                             ),
                           )
                         ],
@@ -270,29 +266,61 @@ class _FirstScreenState extends State<FirstScreen> {
                           widget.selecteIdex = 0;
                         });
                       },
-                      child: Container(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            SvgPicture.asset('images/clipboard.svg',
-                              width: 23.0,
-                              height: 23.0,
-                              color: widget.selecteIdex == 0
-                                  ? Colors.blueAccent
-                                  : Colors.black54,),
-                            Text(
-                              'کارتابل نظارتی',
-                              textDirection: TextDirection.rtl,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'iran_yekan',
-                                fontSize: 12.0,
-                                color: widget.selecteIdex == 0
-                                    ? Colors.blueAccent
-                                    : Colors.black54,),
+                      child: Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          Container(
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  SvgPicture.asset('images/clipboard.svg',
+                                    width: 23.0,
+                                    height: 23.0,
+                                    color: widget.selecteIdex == 0
+                                        ? Colors.blueAccent
+                                        : Colors.black54,),
+                                  Text(
+                                    'کارتابل نظارتی',
+                                    textDirection: TextDirection.rtl,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: 'iran_yekan',
+                                      fontSize: 12.0,
+                                      color: widget.selecteIdex == 0
+                                          ? Colors.blueAccent
+                                          : Colors.black54,),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
+                          ),
+                          totalReviewCartable == '0'
+                          ? Container()
+                          : Container(
+                            width: 20.0,
+                            height: 20.0,
+                            margin: EdgeInsets.only(
+                              top: 5.0,
+                              right: 10.0
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(100.0)),
+                              color: Colors.red,
+                            ),
+                            child: Center(
+                              child: Text(
+                                '${totalReviewCartable.toString()}',
+                                textDirection: TextDirection.rtl,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: 'iran_yekan',
+                                    fontSize: 10.0,
+                                    color: Colors.white),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     )
                 ),
@@ -304,26 +332,60 @@ class _FirstScreenState extends State<FirstScreen> {
                         });
                       },
                       child: Container(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        child: Stack(
+                          alignment: Alignment.topRight,
                           children: [
-                            SvgPicture.asset('images/clipboard.svg',
-                              width: 23.0,
-                              height: 23.0,
-                              color: widget.selecteIdex == 1
-                                  ? Colors.blueAccent
-                                  : Colors.black54,),
-                            Text(
-                              'کارتابل اجرایی',
-                              textDirection: TextDirection.rtl,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'iran_yekan',
-                                fontSize: 12.0,
-                                color: widget.selecteIdex == 1
-                                    ? Colors.blueAccent
-                                    : Colors.black54,),
+                            Container(
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    SvgPicture.asset('images/clipboard.svg',
+                                      width: 23.0,
+                                      height: 23.0,
+                                      color: widget.selecteIdex == 1
+                                          ? Colors.blueAccent
+                                          : Colors.black54,),
+                                    Text(
+                                      'کارتابل اجرایی',
+                                      textDirection: TextDirection.rtl,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontFamily: 'iran_yekan',
+                                        fontSize: 12.0,
+                                        color: widget.selecteIdex == 1
+                                            ? Colors.blueAccent
+                                            : Colors.black54,),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
+                            totalActionCartable == '0'
+                                ? Container()
+                                : Container(
+                              width: 20.0,
+                              height: 20.0,
+                              margin: EdgeInsets.only(
+                                  top: 5.0,
+                                  right: 10.0
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(100.0)),
+                                color: Colors.red,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '${totalActionCartable.toString()}',
+                                  textDirection: TextDirection.rtl,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: 'iran_yekan',
+                                      fontSize: 10.0,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            )
                           ],
                         ),
                       ),
@@ -338,27 +400,29 @@ class _FirstScreenState extends State<FirstScreen> {
                         });
                       },
                       child: Container(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            SvgPicture.asset('images/chat.svg',
-                              width: 23.0,
-                              height: 23.0,
-                              color: widget.selecteIdex == 2
-                                  ? Colors.blueAccent
-                                  : Colors.black54,),
-                            Text(
-                              'پیام ها',
-                              textDirection: TextDirection.rtl,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'iran_yekan',
-                                fontSize: 12.0,
-                                color:  widget.selecteIdex == 2
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              SvgPicture.asset('images/chat.svg',
+                                width: 23.0,
+                                height: 23.0,
+                                color: widget.selecteIdex == 2
                                     ? Colors.blueAccent
                                     : Colors.black54,),
-                            ),
-                          ],
+                              Text(
+                                'پیام ها',
+                                textDirection: TextDirection.rtl,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'iran_yekan',
+                                  fontSize: 12.0,
+                                  color:  widget.selecteIdex == 2
+                                      ? Colors.blueAccent
+                                      : Colors.black54,),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     )
@@ -372,15 +436,18 @@ class _FirstScreenState extends State<FirstScreen> {
 
   Widget _buildRow(IconData icon, Text title, {bool showBadge = false}) {
     final TextStyle tStyle =
-    TextStyle(color: mainColor, fontSize: 14.0, fontFamily: 'iran_yekan');
+    TextStyle(color: themeColor, fontSize: 18.0, fontFamily: 'iran_yekan');
     return Container(
+      height: 60.0,
       padding: const EdgeInsets.symmetric(vertical: 5.0),
-      child: Row(children: [
+      child: Row(
+          children: [
         Icon(
           icon,
-          color: mainColor,
+          size: 30.0,
+          color: themeColor,
         ),
-        SizedBox(width: 10.0),
+        SizedBox(width: 15.0),
         Text(
           title.data,
           style: tStyle,
@@ -505,65 +572,13 @@ class _FirstScreenState extends State<FirstScreen> {
     prefs.remove('myIp_token');
   }
 
-  navigatorRoot(index, context) {
-    if(index == 15){
-      deleteToken();
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => phoneNumber()));
-    }
-  }
+  getUserDetail() async{
+    var response = await get_User_Info.get_user_info();
 
-  checkFirebaseToken() async{
-    SharedPreferences sharedFirebase = await SharedPreferences.getInstance();
-
-    var firebaseToken = sharedFirebase.getString('firebase_token');
-
-    if (firebaseToken == null) {
-      print('nulllllllllllllll');
-      firebaseCloudMessaging_Listeners();
-    } else {
-      print('nooooootnuslllllllllllll');
-      saveFirebaseTokenInServer(firebaseToken);
-    }
-  }
-
-  firebaseCloudMessaging_Listeners() {
-    print('bbbbbbbbbbbb');
-    _firebaseMessaging.getToken().then((firebase_token) {
-
-      saveFirebaseTokenInServer(firebase_token);
+    setState(() {
+      personName = response['person_name'];
+      totalActionCartable = response['total_action_cartable'];
+      totalReviewCartable = response['total_review_cartable'];
     });
-  }
-
-  saveIpToken(String token) async {
-    SharedPreferences fireBaseToken = await SharedPreferences.getInstance();
-
-    await fireBaseToken.setString('firebase_token', token);
-  }
-
-  saveFirebaseTokenInServer(firebase_token) async{
-
-    saveIpToken(firebase_token);
-
-    print('fireBaseToken::::::::::::: $firebase_token');
-
-    print('aaaaaaaaaaaaaaa');
-    SharedPreferences token = await SharedPreferences.getInstance();
-    print('Token::::::::::::: ${token.getString('myIP_token')}');
-    var response = await http.post(api.siteName + '/panel/customerappconfig.json', body: {
-      "version_code": '${100000}',
-      "firebase_token": '${firebase_token.toString()}',
-      "token": '${token.getString('myIP_token')}',
-      "pkg": '${token.getString('pkg')}',
-      "device": '${token.getString('my_device')}',
-    });
-
-    print(response.statusCode);
-    print(response.body);
-    if(response.statusCode == 200){
-      print('fireBaseToken recived!');
-    }
   }
 }

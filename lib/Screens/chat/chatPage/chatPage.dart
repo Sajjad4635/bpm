@@ -217,17 +217,6 @@ class _ChatPageState extends State<ChatPage> {
         body: Container(
           child: Column(
             children: <Widget>[
-//              IconButton(icon: Icon(Icons.add), onPressed: (){
-//                setState(() {
-//                  chats.insert(0 ,allChats(
-//                      text: 'sajjad',
-//                      timeCreated: '12',
-//                      userId: widget.userId,
-//                      orderId: widget.orderId
-//                  ));
-//                  getAllLastChats();
-//                });
-//              }),
               Expanded(
                 child: Container(
                     padding: EdgeInsets.all(pageWidth / 30.0),

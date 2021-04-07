@@ -159,7 +159,7 @@ class _SplashScreenState extends State<SplashScreen> {
     print(response.statusCode);
     print(response.body);
     if(response.statusCode == 200){
-      Timer(Duration(seconds: 3), navigationToFirstScreen);
+      Timer(Duration(seconds: 1), navigationToFirstScreen);
     }
   }
 

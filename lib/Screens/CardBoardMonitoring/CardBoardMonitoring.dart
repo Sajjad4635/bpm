@@ -1,6 +1,7 @@
 import 'package:bpm/Screens/CardBoardMonitoring/cardBoardModelMonitoring.dart';
 import 'package:bpm/Screens/CardBoardMonitoring/fechCardBoadsMonitoring.dart';
 import 'package:bpm/Screens/Cardboard/cardBoardPage/cardBoardPage.dart';
+import 'package:bpm/global/glabalVariables.dart';
 import 'package:bpm/global/loadingPage.dart';
 import 'package:bpm/style/Colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -140,6 +141,7 @@ class _CardBoardMonitoringState extends State<CardBoardMonitoring> {
 
     setState(() {
       allCardBoardsMonitoring = response['allCardBoardsMonitoring'];
+
     });
   }
 }
