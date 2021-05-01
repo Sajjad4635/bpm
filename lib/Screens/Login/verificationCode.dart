@@ -4,6 +4,7 @@ import 'package:bpm/API/api.dart';
 import 'package:bpm/Screens/FirstScreen/FirstScreen.dart';
 import 'package:bpm/global/glabalVariables.dart';
 import 'package:device_info/device_info.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bpm/global/showWarning.dart';
 import 'package:bpm/style/Colors.dart';
@@ -259,7 +260,11 @@ class _verificationCodeState extends State<verificationCode> {
       width: 120.0,
       height: 50.0,
       child: Center(
-        child: CircularProgressIndicator(),
+        child: SpinKitThreeBounce(
+          color: themeColor,
+          size: 30.0,
+          duration: Duration(milliseconds: 1000),
+        ),
       ),
     );
   }

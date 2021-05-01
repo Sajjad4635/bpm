@@ -1,3 +1,4 @@
+import 'package:bpm/Screens/Cardboard/autoSendInvoiceToOwner/autoSendInvoiceToOwner.dart';
 import 'package:bpm/Screens/Cardboard/cardBoardModel.dart';
 import 'package:bpm/Screens/Cardboard/cardBoardPage/cardBoardPage.dart';
 import 'package:bpm/Screens/Cardboard/fechCardBoads.dart';
@@ -66,8 +67,16 @@ class _CardboardState extends State<Cardboard> {
                       } else if (allCardBoards[index].orderKey == 'autosendinvoicetoowner') {
                         print('autosendinvoicetoowner');
                       } if(allCardBoards[index].orderKey == 'autonewonlinepaymentexperts'){
-                        print('autonewonlinepaymentexperts');
+                        flagAutoSendInvoiceToOwner = 0;
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => autoSendInvoiceToOwner(
+                                  allCardBoards[index].value,
+                                  allCardBoards[index].orderKey,
+                                )));
                       }else {
+                        flagCardBoardPage = 0;
                         Navigator.push(
                             context,
                             MaterialPageRoute(

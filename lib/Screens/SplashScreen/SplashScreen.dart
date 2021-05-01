@@ -110,7 +110,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     SharedPreferences token = await SharedPreferences.getInstance();
 
-    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => FirstScreen(0, token.getString('userName'))), (route) => false);
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => FirstScreen(1, token.getString('userName'))), (route) => false);
   }
 
   checkFirebaseToken() async{
@@ -146,7 +146,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
     print('fireBaseToken::::::::::::: $firebase_token');
     print('aaaaaaaaaaaaaaa');
+    print('aaaaaaaaaaaaaaa');
     SharedPreferences token = await SharedPreferences.getInstance();
+    print('Token::::::::::::: ${token.getString('myIP_token')}');
+    print('my_device::::::::::::: ${token.getString('my_device')}');
 
     var response = await http.post(api.siteName + '/panel/customerappconfig.json', body: {
       "version_code": '${100000}',
@@ -156,10 +159,14 @@ class _SplashScreenState extends State<SplashScreen> {
       "device": '${token.getString('my_device')}',
     });
 
+    print('start');
+
     print(response.statusCode);
     print(response.body);
     if(response.statusCode == 200){
       Timer(Duration(seconds: 1), navigationToFirstScreen);
+    }else if(response.statusCode == 401){
+      navigationToPhone();
     }
   }
 

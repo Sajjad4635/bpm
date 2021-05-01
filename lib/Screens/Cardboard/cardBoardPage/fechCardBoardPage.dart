@@ -13,7 +13,7 @@ class get_AllCardBoards {
 
     SharedPreferences token = await SharedPreferences.getInstance();
 
-    final response = await http.post(api.siteName + '/panel/tasklist.json',
+    final response = await http.post(api.siteName + '/panel/tasklistnew.json',
         body: {
           "token": '${token.getString('myIP_token')}',
           "pkg": '${token.getString('pkg')}',

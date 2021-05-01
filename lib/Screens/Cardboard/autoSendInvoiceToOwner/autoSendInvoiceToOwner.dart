@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:bpm/API/api.dart';
 import 'package:bpm/Screens/Cardboard/Cardboard.dart';
-import 'package:bpm/Screens/Cardboard/autoSendInvoiceToOwner/autoSendInvoiceToOwner.dart';
+import 'package:bpm/Screens/Cardboard/cardBoardPage/cardBoardPage.dart';
 import 'package:bpm/Screens/Cardboard/cardBoardPage/cardBoardPageModel.dart';
 import 'package:bpm/Screens/Cardboard/cardBoardPage/fechCardBoardPage.dart';
 import 'package:bpm/Screens/Cardboard/cardBoardPage/showOrderDetail.dart';
@@ -18,13 +18,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 
-var flagCardBoardPage = 0;
-List<cardBoardPageModel> taskList = new List();
+var flagAutoSendInvoiceToOwner = 0;
+List<cardBoardPageModel> taskListSutoSendInvoiceToOwner = new List();
 var forceWorkNumber;
 var empty = false;
 
-var duration;
-var descController = TextEditingController();
+var durationSutoSendInvoiceToOwner;
+var descControllerSutoSendInvoiceToOwner = TextEditingController();
 
 var sendButton = Container(
   width: 120.0,
@@ -64,27 +64,27 @@ var sendButtonDesc = Container(
   ),
 );
 
-class cardBoardPage extends StatefulWidget {
+class autoSendInvoiceToOwner extends StatefulWidget {
   var value, orderKey;
 
-  cardBoardPage(this.value, this.orderKey);
+  autoSendInvoiceToOwner(this.value, this.orderKey);
 
   @override
-  _cardBoardPageState createState() => _cardBoardPageState();
+  _autoSendInvoiceToOwnerState createState() => _autoSendInvoiceToOwnerState();
 }
 
-class _cardBoardPageState extends State<cardBoardPage> {
+class _autoSendInvoiceToOwnerState extends State<autoSendInvoiceToOwner> {
   final _firstScreenScaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
 
     setState(() {
-      if(flagCardBoardPage == 0){
+      if(flagAutoSendInvoiceToOwner == 0){
         empty = false;
         forceWorkNumber = 0;
-        taskList.clear();
+        taskListSutoSendInvoiceToOwner.clear();
         getTeskList();
-        flagCardBoardPage = 1;
+        flagAutoSendInvoiceToOwner = 1;
       }
     });
 
@@ -101,259 +101,258 @@ class _cardBoardPageState extends State<cardBoardPage> {
             )),
         child: SafeArea(
             child: Column(
-          children: [
-            Expanded(
-              child: (taskList.isEmpty) && (empty == false)
-                  ? LoadingPage()
-                  : (taskList.isEmpty) && (empty == true)
+              children: [
+                Expanded(
+                  child: (taskListSutoSendInvoiceToOwner.isEmpty) && (empty == false)
+                      ? LoadingPage()
+                      : (taskListSutoSendInvoiceToOwner.isEmpty) && (empty == true)
                       ? Container(
-                          child: Center(
-                            child: Text(
-                              'اطلاعاتی وجود ندارد!',
-                              textDirection: TextDirection.rtl,
-                              style: TextStyle(
-                                  fontFamily: 'iran_yekan',
-                                  color: themeColor,
-                                  fontSize: 15.0),
-                            ),
-                          ),
-                        )
-                      : ListView.separated(
-                          separatorBuilder: (context, indexSep) {
-                            return Container(
-                              margin: EdgeInsets.only(left: 30.0, right: 30.0),
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 15.0,
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          itemCount: taskList.length,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-//                                Navigator.push(
-//                                    context,
-//                                    MaterialPageRoute(
-//                                        builder: (context) =>
-//                                            showOrderDetail(taskList[index].tn)));
-                              },
-                              child: Container(
-                                height: MediaQuery.of(context).size.height / 4,
-                                margin:
-                                    EdgeInsets.only(left: 10.0, right: 10.0),
-                                padding:
-                                    EdgeInsets.only(left: 10.0, right: 10.0),
-                                decoration: BoxDecoration(
-                                    color: int.parse(taskList[index].taskAlarmAfterTime) >= ((DateTime.now().millisecondsSinceEpoch)/1000).toInt()
-                                    ? Color(0xffE5E5E5)
-                                    : Colors.white,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(15.0)),
-                                    border: Border.all(color: themeColor)),
-                                child: Row(
-                                  textDirection: TextDirection.rtl,
-                                  children: [
-                                    Expanded(
-                                      flex: 7,
-                                      child: Container(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Text(
-                                              taskList[index].tn == null
-                                                  ? 'شماره سفارش : -'
-                                                  : 'شماره سفارش : ${taskList[index].tn}',
-                                              textDirection: TextDirection.rtl,
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontSize: 15.0,
-                                                  fontFamily: 'iran_yekan',
-                                                  color: themeColor),
-                                            ),
-                                            Text(
-                                              taskList[index]
-                                                          .userIdOwnerValue == null
-                                                  ? 'صاحب سفارش : -'
-                                                  : doNotShowEnglish(
-                                                      'صاحب سفارش : ${taskList[index].userIdOwnerValue}'),
-                                              textDirection: TextDirection.rtl,
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontSize: 15.0,
-                                                  fontFamily: 'iran_yekan',
-                                                  color: themeColor),
-                                            ),
-                                            Text(
-                                              taskList[index]
-                                                          .expertUserIdValue == null
-                                                  ? 'مدیر مشتری : -'
-                                                  : doNotShowEnglish(
-                                                      'مدیر مشتری : ${taskList[index].expertUserIdValue}'),
-                                              textDirection: TextDirection.rtl,
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontSize: 15.0,
-                                                  fontFamily: 'iran_yekan',
-                                                  color: themeColor),
-                                            ),
-                                            Text(
-                                              taskList[index]
-                                                          .orderStatusValue == null
-                                                  ? 'وضعیت : -'
-                                                  : 'وضعیت : ${taskList[index].orderStatusValue}',
-                                              textDirection: TextDirection.rtl,
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontSize: 15.0,
-                                                  fontFamily: 'iran_yekan',
-                                                  color: themeColor),
-                                            ),
-                                            int.parse(taskList[index].taskAlarmAfterTime) >= ((DateTime.now().millisecondsSinceEpoch)/1000).toInt()
-                                            ? Text(
-                                              'به تعویق افتاده تا  ${taskList[index].taskAlarmAfterTimeValue}',
-                                              textDirection: TextDirection.rtl,
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontSize: 15.0,
-                                                  fontFamily: 'iran_yekan',
-                                                  color: themeColor),
-                                            )
-                                            : Container()
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Container(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                postponing(taskList[index].tasklistId);
-                                              },
-                                              child: Container(
-                                                height: 30.0,
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                5.0)),
-                                                    color: themeColor),
-                                                child: Center(
-                                                  child: Text(
-                                                    'به تعویق انداختن',
-                                                    textDirection:
-                                                        TextDirection.rtl,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontSize: 12.0,
-                                                        fontFamily: 'iran_yekan',
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                descController.clear();
-                                                taskList[index].taskComment == null
-                                                ? descController.value = TextEditingValue(text: '')
-                                                : descController.value = TextEditingValue(text: '${taskList[index].taskComment}');
-                                                addDescription(taskList[index].tasklistId, index);
-                                              },
-                                              child: Container(
-                                                height: 30.0,
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                5.0)),
-                                                    color: themeColor),
-                                                child: Center(
-                                                  child: Text(
-                                                    'توضیحات',
-                                                    textDirection:
-                                                        TextDirection.rtl,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontSize: 12.0,
-                                                        fontFamily:
-                                                            'iran_yekan',
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                print(taskList[index].actValue[0].key);
-                                                launchURL(taskList[index].actValue[0].key);
-                                              },
-                                              child: Container(
-                                                height: 30.0,
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                5.0)),
-                                                    color: themeColor),
-                                                child: Center(
-                                                  child: Text(
-                                                    'عملیات',
-                                                    textDirection:
-                                                        TextDirection.rtl,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontSize: 12.0,
-                                                        fontFamily:
-                                                            'iran_yekan',
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-            ),
-            forceWorkNumber != 0
-                ? Container(
-                    margin: EdgeInsets.all(10.0),
-                    width: MediaQuery.of(context).size.width,
-                    height: 50.0,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                        color: Colors.red),
                     child: Center(
                       child: Text(
-                        'تعداد کار در وضعیت بحرانی(${forceWorkNumber.toString()})',
+                        'اطلاعاتی وجود ندارد!',
                         textDirection: TextDirection.rtl,
-                        textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 15.0,
                             fontFamily: 'iran_yekan',
-                            color: Colors.white),
+                            color: themeColor,
+                            fontSize: 15.0),
                       ),
                     ),
                   )
-                : Container()
-          ],
-        )),
+                      : ListView.separated(
+                    separatorBuilder: (context, indexSep) {
+                      return Container(
+                        margin: EdgeInsets.only(left: 30.0, right: 30.0),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 15.0,
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    itemCount: taskListSutoSendInvoiceToOwner.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      showOrderDetail(taskList[index].tn)));
+                        },
+                        child: Container(
+                          height: MediaQuery.of(context).size.height / 4,
+                          margin:
+                          EdgeInsets.only(left: 10.0, right: 10.0),
+                          padding:
+                          EdgeInsets.only(left: 10.0, right: 10.0),
+                          decoration: BoxDecoration(
+                              color: int.parse(taskListSutoSendInvoiceToOwner[index].taskAlarmAfterTime) >= ((DateTime.now().millisecondsSinceEpoch)/1000).toInt()
+                                  ? Color(0xffE5E5E5)
+                                  : Colors.white,
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(15.0)),
+                              border: Border.all(color: themeColor)),
+                          child: Row(
+                            textDirection: TextDirection.rtl,
+                            children: [
+                              Expanded(
+                                flex: 7,
+                                child: Container(
+                                  child: Column(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text(
+                                        taskListSutoSendInvoiceToOwner[index].detailText == null
+                                            ? 'سفارش : -'
+                                            : doNotShowEnglish(
+                                            'سفارش : ${taskListSutoSendInvoiceToOwner[index].detailText}'),
+                                        textDirection: TextDirection.rtl,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 15.0,
+                                            fontFamily: 'iran_yekan',
+                                            color: themeColor),
+                                      ),
+                                      Text(
+                                        taskListSutoSendInvoiceToOwner[index].tn == null
+                                            ? 'وضعیت : -'
+                                            : 'وضعیت : ${taskListSutoSendInvoiceToOwner[index].tn}',
+                                        textDirection: TextDirection.rtl,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 15.0,
+                                            fontFamily: 'iran_yekan',
+                                            color: themeColor),
+                                      ),
+                                      Text(
+                                        taskListSutoSendInvoiceToOwner[index]
+                                            .userIdOwnerTitle == null
+                                            ? 'مبلغ : -'
+                                            : doNotShowEnglish(
+                                            'مبلغ : ${taskListSutoSendInvoiceToOwner[index].userIdOwnerTitle}'),
+                                        textDirection: TextDirection.rtl,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 15.0,
+                                            fontFamily: 'iran_yekan',
+                                            color: themeColor),
+                                      ),
+                                      Text(
+                                        taskListSutoSendInvoiceToOwner[index]
+                                            .orderStatusTitle == null
+                                            ? 'مدیر مشتری : -'
+                                            : 'مدیر مشتری : ${taskListSutoSendInvoiceToOwner[index].orderStatusTitle}',
+                                        textDirection: TextDirection.rtl,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 15.0,
+                                            fontFamily: 'iran_yekan',
+                                            color: themeColor),
+                                      ),
+                                      taskListSutoSendInvoiceToOwner[index].taskAlarmAfterTimeValue == null
+                                          ? Container()
+                                          : Text(
+                                        'به تعویق افتاده تا  ${taskListSutoSendInvoiceToOwner[index].taskAlarmAfterTimeValue}',
+                                        textDirection: TextDirection.rtl,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 15.0,
+                                            fontFamily: 'iran_yekan',
+                                            color: themeColor),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: Container(
+                                  child: Column(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          postponing(taskListSutoSendInvoiceToOwner[index].tasklistId);
+                                        },
+                                        child: Container(
+                                          height: 30.0,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.all(
+                                                  Radius.circular(
+                                                      5.0)),
+                                              color: themeColor),
+                                          child: Center(
+                                            child: Text(
+                                              'به تعویق انداختن',
+                                              textDirection:
+                                              TextDirection.rtl,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 12.0,
+                                                  fontFamily: 'iran_yekan',
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          descControllerSutoSendInvoiceToOwner.clear();
+                                          taskListSutoSendInvoiceToOwner[index].taskComment == null
+                                              ? descControllerSutoSendInvoiceToOwner.value = TextEditingValue(text: '')
+                                              : descControllerSutoSendInvoiceToOwner.value = TextEditingValue(text: '${taskListSutoSendInvoiceToOwner[index].taskComment}');
+                                          addDescription(taskListSutoSendInvoiceToOwner[index].tasklistId, index);
+                                        },
+                                        child: Container(
+                                          height: 30.0,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.all(
+                                                  Radius.circular(
+                                                      5.0)),
+                                              color: themeColor),
+                                          child: Center(
+                                            child: Text(
+                                              'توضیحات',
+                                              textDirection:
+                                              TextDirection.rtl,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 12.0,
+                                                  fontFamily:
+                                                  'iran_yekan',
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+//                                          launchURL(
+//                                              'https://fatertejarat.com');
+                                        },
+                                        child: Container(
+                                          height: 30.0,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.all(
+                                                  Radius.circular(
+                                                      5.0)),
+                                              color: themeColor),
+                                          child: Center(
+                                            child: Text(
+                                              'عملیات',
+                                              textDirection:
+                                              TextDirection.rtl,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 12.0,
+                                                  fontFamily:
+                                                  'iran_yekan',
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                forceWorkNumber != 0
+                    ? Container(
+                  margin: EdgeInsets.all(10.0),
+                  width: MediaQuery.of(context).size.width,
+                  height: 50.0,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                      color: Colors.red),
+                  child: Center(
+                    child: Text(
+                      'تعداد کار در وضعیت بحرانی(${forceWorkNumber.toString()})',
+                      textDirection: TextDirection.rtl,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 15.0,
+                          fontFamily: 'iran_yekan',
+                          color: Colors.white),
+                    ),
+                  ),
+                )
+                    : Container()
+              ],
+            )),
       ),
     );
   }
@@ -362,7 +361,7 @@ class _cardBoardPageState extends State<cardBoardPage> {
     var response = await get_AllCardBoards.get_allcardboards(widget.orderKey);
 
     setState(() {
-      taskList = response['allCardBoards'];
+      taskListSutoSendInvoiceToOwner = response['allCardBoards'];
       forceWorkNumber = response['forceWorkNumber'];
       empty = response['empty'];
     });
@@ -468,7 +467,7 @@ class _cardBoardPageState extends State<cardBoardPage> {
                           return InkWell(
                             onTap: (){
                               setState(() {
-                                duration = allTimes[index].key;
+                                durationSutoSendInvoiceToOwner = allTimes[index].key;
                                 durationValue = allTimes[index].value;
                               });
                             },
@@ -503,7 +502,7 @@ class _cardBoardPageState extends State<cardBoardPage> {
                         "token": '${token.getString('myIP_token')}',
                         "pkg": '${token.getString('pkg')}',
                         "device": '${token.getString('my_device')}',
-                        "time": '${duration.toString()}',
+                        "time": '${durationSutoSendInvoiceToOwner.toString()}',
                         "task_id": '${taskID.toString()}',
                       });
                       print(response.statusCode);
@@ -512,7 +511,7 @@ class _cardBoardPageState extends State<cardBoardPage> {
                       if(response.statusCode == 200){
                         setState(() {
                           sendButtonBack();
-                          flagCardBoardPage = 0;
+                          flagAutoSendInvoiceToOwner = 0;
                         });
                         Navigator.pop(context);
                         _firstScreenScaffoldKey.currentState.showSnackBar(new SnackBar(
@@ -651,7 +650,7 @@ class _cardBoardPageState extends State<cardBoardPage> {
                   ),
                   Container(
                     child: TextField(
-                      controller: descController,
+                      controller: descControllerSutoSendInvoiceToOwner,
                       textAlign: TextAlign.center,
                       cursorColor: mainColor,
                       autofocus: false,
@@ -714,7 +713,7 @@ class _cardBoardPageState extends State<cardBoardPage> {
       "pkg": '${token.getString('pkg')}',
       "device": '${token.getString('my_device')}',
       "task_id": '${taskID.toString()}',
-      "comment": '${descController.text}'
+      "comment": '${descControllerSutoSendInvoiceToOwner.text}'
     });
     print(response.statusCode);
     print(response.body);
@@ -722,7 +721,7 @@ class _cardBoardPageState extends State<cardBoardPage> {
     if(response.statusCode == 200){
 
       setState(() {
-        flagCardBoardPage = 0;
+        flagAutoSendInvoiceToOwner = 0;
       });
 
       sendButtonDescBack();

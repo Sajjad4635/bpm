@@ -7,6 +7,7 @@ import 'package:device_info/device_info.dart';
 import 'package:bpm/global/showWarning.dart';
 import 'package:bpm/style/Colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -225,7 +226,11 @@ class _phoneNumberState extends State<phoneNumber> {
   conForward() {
     ContainerNext = Container(
       child: Center(
-        child: CircularProgressIndicator(),
+        child: SpinKitThreeBounce(
+          color: themeColor,
+          size: 30.0,
+          duration: Duration(milliseconds: 1000),
+        ),
       ),
     );
   }

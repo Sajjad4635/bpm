@@ -199,8 +199,8 @@ class _AllCustomersState extends State<AllCustomers> {
                                                 child: Text(
                                                   allChatsDetail[index].user_id_title == null
                                                       ? 'بدون نام'
-                                                      : '${doNotShowEnglish(allChatsDetail[index].user_id_title)}- ${allChatsDetail[index].order_tn_title}',
-                                                  textDirection: TextDirection.rtl,
+                                                      : '${doNotShowEnglish(allChatsDetail[index].user_id_title)} - ${allChatsDetail[index].order_tn_title}',
+                                                  textDirection: TextDirection.ltr,
                                                   style: TextStyle(
                                                     fontFamily: 'iran_yekan',
                                                     color: mainColor,

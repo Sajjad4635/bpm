@@ -28,6 +28,7 @@ class _CardBoardMonitoringState extends State<CardBoardMonitoring> {
     'fa fa-shipping-fast': FontAwesomeIcons.shippingFast,
     'fa fa-newspaper': FontAwesomeIcons.newspaper,
     'fa fa-medkit': FontAwesomeIcons.medkit,
+    'fa fa-balance-scale': FontAwesomeIcons.balanceScale,
   };
 
   @override

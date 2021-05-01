@@ -1,6 +1,11 @@
 class cardBoardPageModel {
   String tasklistId;
   String taskAlarmAfterTime;
+  String userIdOwnerValue;
+  String expertUserIdValue;
+  String orderStatusValue;
+  List<ActValue> actValue;
+  String taskAlarmAfterTimeValue;
   var taskUserIdChanged;
   var taskUpdateTime;
   String taskTimeEnter;
@@ -11,7 +16,7 @@ class cardBoardPageModel {
   String expertUserIdTitle;
   var taskUserIdChangedTitle;
   String orderStatusTitle;
-  List<String> servicesTitle;
+  var servicesTitle;
   String timeCreatedTitle;
   var taskUpdateTimeTitle;
   String timeUpdatedTitle;
@@ -58,6 +63,7 @@ class cardBoardPageModel {
   String orderStatus;
   var statusReason;
   var statusText;
+  var detailText;
   String services;
   String userIdCreated;
   String totalvweight;
@@ -120,6 +126,11 @@ class cardBoardPageModel {
   cardBoardPageModel(
       {this.tasklistId,
         this.taskAlarmAfterTime,
+        this.userIdOwnerValue,
+        this.expertUserIdValue,
+        this.orderStatusValue,
+        this.actValue,
+        this.taskAlarmAfterTimeValue,
         this.taskUserIdChanged,
         this.taskUpdateTime,
         this.taskTimeEnter,
@@ -239,6 +250,16 @@ class cardBoardPageModel {
   cardBoardPageModel.fromJson(Map<String, dynamic> json) {
     tasklistId = json['tasklist_id'];
     taskAlarmAfterTime = json['task_alarm_after_time'];
+    userIdOwnerValue = json['user_id_owner_value'];
+    expertUserIdValue = json['expert_user_id_value'];
+    orderStatusValue = json['order_status_value'];
+    if (json['act_value'] != null) {
+      actValue = new List<ActValue>();
+      json['act_value'].forEach((v) {
+        actValue.add(new ActValue.fromJson(v));
+      });
+    }
+    taskAlarmAfterTimeValue = json['task_alarm_after_time_value'];
     taskUserIdChanged = json['task_user_id_changed'];
     taskUpdateTime = json['task_update_time'];
     taskTimeEnter = json['task_time_enter'];
@@ -249,7 +270,7 @@ class cardBoardPageModel {
     expertUserIdTitle = json['expert_user_id_title'];
     taskUserIdChangedTitle = json['task_user_id_changed_title'];
     orderStatusTitle = json['order_status_title'];
-    servicesTitle = json['services_title'].cast<String>();
+    servicesTitle = json['services_title'];
     timeCreatedTitle = json['time_created_title'];
     taskUpdateTimeTitle = json['task_update_time_title'];
     timeUpdatedTitle = json['time_updated_title'];
@@ -296,6 +317,7 @@ class cardBoardPageModel {
     orderStatus = json['order_status'];
     statusReason = json['status_reason'];
     statusText = json['status_text'];
+    detailText = json['detail_text'];
     services = json['services'];
     userIdCreated = json['user_id_created'];
     totalvweight = json['totalvweight'];
@@ -360,6 +382,12 @@ class cardBoardPageModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['tasklist_id'] = this.tasklistId;
     data['task_alarm_after_time'] = this.taskAlarmAfterTime;
+    data['user_id_owner_value'] = this.userIdOwnerValue;
+    data['expert_user_id_value'] = this.expertUserIdValue;
+    data['order_status_value'] = this.orderStatusValue;
+    if (this.actValue != null) {
+      data['act_value'] = this.actValue.map((v) => v.toJson()).toList();
+    }
     data['task_user_id_changed'] = this.taskUserIdChanged;
     data['task_update_time'] = this.taskUpdateTime;
     data['task_time_enter'] = this.taskTimeEnter;
@@ -417,6 +445,7 @@ class cardBoardPageModel {
     data['order_status'] = this.orderStatus;
     data['status_reason'] = this.statusReason;
     data['status_text'] = this.statusText;
+    data['detail_text'] = this.detailText;
     data['services'] = this.services;
     data['user_id_created'] = this.userIdCreated;
     data['totalvweight'] = this.totalvweight;
@@ -476,6 +505,25 @@ class cardBoardPageModel {
     data['tarkhis_code_updated_at'] = this.tarkhisCodeUpdatedAt;
     data['tarkhis_code_updated_by'] = this.tarkhisCodeUpdatedBy;
     data['cancel_after_pickup'] = this.cancelAfterPickup;
+    return data;
+  }
+}
+
+class ActValue {
+  String key;
+  String value;
+
+  ActValue({this.key, this.value});
+
+  ActValue.fromJson(Map<String, dynamic> json) {
+    key = json['key'];
+    value = json['value'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['key'] = this.key;
+    data['value'] = this.value;
     return data;
   }
 }
